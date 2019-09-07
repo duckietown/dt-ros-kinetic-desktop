@@ -1,0 +1,13 @@
+# GUI Tools
+lxde
+xvfb
+x11vnc
+supervisor
+fluxbox
+octave
+net-tools
+git-core
+git
+
+# ROS
+ros-kinetic-desktop
