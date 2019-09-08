@@ -2,7 +2,6 @@
 lxde
 xvfb
 x11vnc
-supervisor
 fluxbox
 octave
 net-tools
@@ -11,3 +10,13 @@ git
 
 # ROS
 ros-kinetic-desktop
+
+# Extra
+supervisor
+pwgen
+net-tools
+lxde
+gtk2-engines-murrine
+ttf-ubuntu-font-family
+nodejs
+websockify

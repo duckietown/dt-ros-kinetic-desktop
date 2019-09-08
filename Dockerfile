@@ -7,19 +7,33 @@ RUN apt-get update \
     $(awk -F: '/^[^#]/ { print $1 }' /tmp/dependencies-apt.txt | uniq) \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://github.com/novnc/noVNC/archive/v1.1.0.tar.gz | tar -xzv -C /root/ \ 
-  && mv /root/noVNC-1.1.0 /root/novnc \
-  && ln -s /root/novnc/vnc_lite.html /root/novnc/index.html
+RUN curl -sSL https://github.com/novnc/noVNC/archive/v1.1.0.tar.gz | tar -xzv -C / \ 
+  && mv /noVNC-1.1.0 /noVNC
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN adduser --gecos "ROS User" --disabled-password ros \
+	&& usermod -a -G dialout ros \
+        && echo "ros ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/99_aptget \
+	&& chmod 0440 /etc/sudoers.d/99_aptget \
+	&& chown root:root /etc/sudoers.d/99_aptget
 
-RUN rm /tmp/dependencies*
+#USER ros
+RUN HOME=/home/ros
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV ENV_SCREEN_RESOLUTION 1024x768
-ENV DISPLAY :0
+# Create a ROS workspace for the ROS user.
+RUN mkdir -p /home/ros/workspace/src
+RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; catkin_init_workspace /home/ros/workspace/src'
+RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; cd /home/ros/workspace; catkin_make'
+ADD bashrc /.bashrc
+ADD bashrc /home/ros/.bashrc
 
-ENTRYPOINT ["/ros_entrypoint.sh"]
+ADD supervisord.conf /
+ADD xterm /home/Desktop/
 
-# configure command
-CMD ["bash"]
+ENV QT_X11_NO_MITSHM=1
+ENV HOME=/home/ros
+
+ADD startcontainer /usr/local/bin/startcontainer
+RUN chmod 755 /usr/local/bin/startcontainer
+
+CMD ["/bin/bash"]
+ENTRYPOINT ["/usr/local/bin/startcontainer"]
