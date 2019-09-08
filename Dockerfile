@@ -16,23 +16,16 @@ RUN adduser --gecos "ROS User" --disabled-password ros \
 	&& chmod 0440 /etc/sudoers.d/99_aptget \
 	&& chown root:root /etc/sudoers.d/99_aptget
 
-RUN HOME=/home/ros
-
-# Create a ROS workspace for the ROS user.
-RUN mkdir -p /home/ros/workspace/src
-RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; catkin_init_workspace /home/ros/workspace/src'
-RUN /bin/bash -c '. /opt/ros/kinetic/setup.bash; cd /home/ros/workspace; catkin_make'
 ADD bashrc /.bashrc
 ADD bashrc /home/ros/.bashrc
 
 ADD supervisord.conf /
 ADD xterm /home/ros/Desktop/
 
-ENV QT_X11_NO_MITSHM=1
-ENV HOME=/home/ros
+ENV HOME=/home/ros QT_X11_NO_MITSHM=1 HOME=/home/ros
 
-ADD startcontainer /usr/local/bin/startcontainer
-RUN chmod 755 /usr/local/bin/startcontainer
+ADD entrypoint /usr/local/bin/entrypoint
+RUN chmod 755 /usr/local/bin/entrypoint
 
 CMD ["/bin/bash"]
-ENTRYPOINT ["/usr/local/bin/startcontainer"]
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
