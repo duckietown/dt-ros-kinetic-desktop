@@ -3,7 +3,6 @@ lxde
 xvfb
 x11vnc
 fluxbox
-octave
 net-tools
 git-core
 git
@@ -14,8 +13,6 @@ ros-kinetic-desktop
 # Extra
 supervisor
 pwgen
-net-tools
-lxde
 gtk2-engines-murrine
 ttf-ubuntu-font-family
 nodejs

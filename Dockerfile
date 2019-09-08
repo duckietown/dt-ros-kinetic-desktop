@@ -1,4 +1,4 @@
-FROM duckietown/dt-ros-kinetic-base:devel20
+FROM duckietown/dt-ros-kinetic-base:daffy-amd64
 
 COPY dependencies-apt.txt /tmp/
 
@@ -16,7 +16,6 @@ RUN adduser --gecos "ROS User" --disabled-password ros \
 	&& chmod 0440 /etc/sudoers.d/99_aptget \
 	&& chown root:root /etc/sudoers.d/99_aptget
 
-#USER ros
 RUN HOME=/home/ros
 
 # Create a ROS workspace for the ROS user.
@@ -27,7 +26,7 @@ ADD bashrc /.bashrc
 ADD bashrc /home/ros/.bashrc
 
 ADD supervisord.conf /
-ADD xterm /home/Desktop/
+ADD xterm /home/ros/Desktop/
 
 ENV QT_X11_NO_MITSHM=1
 ENV HOME=/home/ros
