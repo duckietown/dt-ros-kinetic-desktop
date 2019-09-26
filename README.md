@@ -12,7 +12,7 @@ docker build . -t duckietown/dt-ros-kinetic-desktop
 ## Run
 
 ```
-docker run -it -p 6080:6080 -v `pwd`/workspaceSrc:/home/ros/workspace/src duckietown/dt-ros-kinetic-desktop /bin/bash
+docker run -it -p 6080:6080 -p 11311:11311 [-v `pwd`/workspaceSrc:/home/ros/workspace/src] duckietown/dt-ros-kinetic-desktop /bin/bash
 ```
 
 ## URL
